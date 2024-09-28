@@ -14,17 +14,8 @@ def convert_raw_json_to_avro(stg_dir: str, raw_dir: str):
     # create directory for raw dir if not exists
     os.makedirs(stg_dir, exist_ok=True)
 
-    parsed_schema = parse_schema({
-        'name': 'Sales',
-        'type': 'record',
-        'namespace': 'sales',
-        'fields': [
-            {'name': 'client', 'type': 'string'},
-            {'name': 'purchase_date', 'type': 'string'},
-            {'name': 'product', 'type': 'string'},
-            {'name': 'price', 'type': 'double'},
-        ]
-    })
+    with open('schema.json', 'r') as f:
+        parsed_schema = parse_schema(json.load(f))
 
     total_records = 0
 

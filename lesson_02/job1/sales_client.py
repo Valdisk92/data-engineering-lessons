@@ -5,11 +5,11 @@ import os
 logger = logging.getLogger(__name__)
 
 class SalesClient:
-    def __init__(self):
-        self.auth_token = os.environ.get("API_AUTH_TOKEN")
-        self.url = 'https://fake-api-vycpfa6oca-uc.a.run.app/sales'
+    def __init__(self, api_url: str, auth_token: str):
+        self.auth_token = auth_token
+        self.url = api_url
 
-    def get_sales_transactions(self, date: str, page: int = 1):
+    def get_sales_transactions(self, date: str, page: int = 1) -> object:
         logger.info(f"Performing request to {self.url} for {page} for date {date}")
 
         if not self.auth_token:

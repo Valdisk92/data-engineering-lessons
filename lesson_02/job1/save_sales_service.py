@@ -6,14 +6,18 @@ from lesson_02.job1.sales_client import SalesClient
 
 logger = logging.getLogger(__name__)
 
-def save_sales_to_local_dir(date: str, raw_dir: str) -> None:
+API_URL = 'https://fake-api-vycpfa6oca-uc.a.run.app/sales'
+AUTH_TOKEN = os.environ.get("API_AUTH_TOKEN")
+
+def save_sales_to_local_dir(date: str, raw_dir: str, sales_client=None) -> None:
     # clear raw dir from all files
     shutil.rmtree(raw_dir, ignore_errors=True)
 
     # create directory for raw dir if not exists
     os.makedirs(raw_dir, exist_ok=True)
 
-    sales_client = SalesClient()
+    if sales_client is None:
+        sales_client = SalesClient(api_url=API_URL, auth_token=AUTH_TOKEN)
 
     page = 1
     total_records = 0
