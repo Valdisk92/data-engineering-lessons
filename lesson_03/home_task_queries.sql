@@ -38,18 +38,29 @@ LIMIT 10;
 в прокаті
 */
 -- SQL code goes here...
-WITH payments_by_categories AS (SELECT c.name AS category_name, SUM(p.amount) AS sum_payments
-                                FROM category c
-                                         JOIN film_category fc ON c.category_id = fc.category_id
-                                         JOIN inventory i ON i.film_id = fc.film_id
-                                         JOIN rental r ON r.inventory_id = i.inventory_id
-                                         JOIN payment p ON p.rental_id = r.rental_id
-                                GROUP BY c.name),
-     max_payment AS (SELECT MAX(sum_payments) AS max_sum_payments
-                     FROM payments_by_categories)
-SELECT category_name, sum_payments
+WITH payments_by_categories AS
+(
+    SELECT
+        c.name AS category_name,
+        SUM(p.amount) AS sum_payments
+    FROM category c
+        JOIN film_category fc ON c.category_id = fc.category_id
+        JOIN inventory i ON i.film_id = fc.film_id
+        JOIN rental r ON r.inventory_id = i.inventory_id
+        JOIN payment p ON p.rental_id = r.rental_id
+    GROUP BY c.name
+),
+max_payment AS
+(
+    SELECT
+        MAX(sum_payments) AS max_sum_payments
+    FROM payments_by_categories
+)
+SELECT 
+    category_name, 
+    sum_payments
 FROM payments_by_categories
-         JOIN max_payment ON payments_by_categories.sum_payments = max_payment.max_sum_payments;
+JOIN max_payment ON payments_by_categories.sum_payments = max_payment.max_sum_payments;
 
 
 /*
